@@ -12,6 +12,33 @@ class Tree {
   constructor(array) {
     this.root = buildTree(array);
   }
+
+  insert(value) {
+    function insertRecursive(root, value) {
+      // Base Case: If the child is null, insert the new value (node)
+      if (root === null) {
+        return new Node(value);
+      }
+
+      // If the child is a duplicate, return the child to maintain structure
+      if (root.data === value) {
+        return root;
+      }
+
+      // If value is less, go to the left
+      if (value < root.data) {
+        root.left = insertRecursive(root.left, value);
+      }
+      // If value is greater, go to the right
+      else if (value > root.data) {
+        root.right = insertRecursive(root.right, value);
+      }
+
+      return root;
+    }
+
+    this.root = insertRecursive(this.root, value);
+  }
 }
 
 function buildTree(array) {
