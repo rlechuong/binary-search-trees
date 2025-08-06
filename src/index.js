@@ -42,16 +42,16 @@ class Tree {
 
   delete(value) {
     function deleteRecursive(root, value) {
-      // Base Case: Value not found, empty tree, gone past leaf
+      // Base Case: Value not found or empty tree
       if (root === null) {
         return null;
       }
 
       if (value < root.data) {
-        // If value is smaller, go to the left
+        // If value is smaller, search left subtree
         root.left = deleteRecursive(root.left, value);
       } else if (value > root.data) {
-        // If value is bigger, go to the right
+        // If value is bigger, search right subtree
         root.right = deleteRecursive(root.right, value);
       } else {
         // Value found. Case 1: Node has no children
@@ -77,10 +77,10 @@ class Tree {
     }
 
     function getSuccessor(root) {
-      // The successor has to be in the right subtree of the deleted root
+      // The successor has to be in the right subtree of the root to delete
       let current = root.right;
 
-      // Keep going left as far as possible
+      // Keep searching left subtree until hitting null
       while (current !== null && current.left !== null) {
         current = current.left;
       }
@@ -89,6 +89,30 @@ class Tree {
     }
 
     this.root = deleteRecursive(this.root, value);
+  }
+
+  find(value) {
+    function findRecursive(root, value) {
+      // Value not found or empty tree, return null to bubble up
+      if (root === null) {
+        return null;
+      }
+
+      // Value found, return the Node to bubble up
+      if (root.data === value) {
+        return root;
+      }
+
+      // If value is smaller, search left subtree
+      if (value < root.data) {
+        return findRecursive(root.left, value);
+        // If value is bigger, search right subtree
+      } else if (value > root.data) {
+        return findRecursive(root.right, value);
+      }
+    }
+
+    return findRecursive(this.root, value);
   }
 }
 
