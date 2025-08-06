@@ -114,6 +114,27 @@ class Tree {
 
     return findRecursive(this.root, value);
   }
+
+  levelOrderForEach(callback) {
+    if (this.root === null) {
+      return;
+    }
+
+    let queue = [];
+    queue.push(this.root);
+
+    while (queue.length > 0) {
+      let current = queue[0];
+      callback(current);
+      if (current.left !== null) {
+        queue.push(current.left);
+      }
+      if (current.right !== null) {
+        queue.push(current.right);
+      }
+      queue.shift();
+    }
+  }
 }
 
 function buildTree(array) {
