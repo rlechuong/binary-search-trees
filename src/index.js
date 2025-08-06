@@ -39,6 +39,57 @@ class Tree {
 
     this.root = insertRecursive(this.root, value);
   }
+
+  delete(value) {
+    function deleteRecursive(root, value) {
+      // Base Case: Value not found, empty tree, gone past leaf
+      if (root === null) {
+        return null;
+      }
+
+      if (value < root.data) {
+        // If value is smaller, go to the left
+        root.left = deleteRecursive(root.left, value);
+      } else if (value > root.data) {
+        // If value is bigger, go to the right
+        root.right = deleteRecursive(root.right, value);
+      } else {
+        // Value found. Case 1: Node has no children
+        if (root.right === null && root.left === null) {
+          return null;
+          // Case 2A: Node has one child (left)
+        } else if (root.right === null && root.left !== null) {
+          return root.left;
+          // Case 2B: Node has one child (right)
+        } else if (root.right !== null && root.left === null) {
+          return root.right;
+          // Case 3: Node has two children
+        } else {
+          let successor = getSuccessor(root);
+          // Replace the node to delete's data with successor's data
+          root.data = successor.data;
+          // Recursively delete the successor
+          root.right = deleteRecursive(root.right, successor.data);
+        }
+      }
+
+      return root;
+    }
+
+    function getSuccessor(root) {
+      // The successor has to be in the right subtree of the deleted root
+      let current = root.right;
+
+      // Keep going left as far as possible
+      while (current !== null && current.left !== null) {
+        current = current.left;
+      }
+
+      return current;
+    }
+
+    this.root = deleteRecursive(this.root, value);
+  }
 }
 
 function buildTree(array) {
@@ -77,4 +128,8 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
 };
 
 const testTree = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
+console.log(prettyPrint(testTree.root));
+testTree.insert(69);
+testTree.insert(420);
+testTree.insert(1738);
 console.log(prettyPrint(testTree.root));
