@@ -262,6 +262,16 @@ class Tree {
     }
     return isBalancedRecursive(this.root).balanced;
   }
+
+  rebalance() {
+    const data = [];
+
+    this.inOrderForEach(function (node) {
+      data.push(node.data);
+    });
+
+    this.root = buildTree(data);
+  }
 }
 
 function buildTree(array) {
@@ -299,12 +309,131 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
   }
 };
 
-const testTree = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
-console.log(prettyPrint(testTree.root));
-testTree.insert(69);
-testTree.insert(420);
-testTree.insert(1738);
+// Driver Script
+
+// Random Integer From 10-15
+const randomCount = Math.floor(Math.random() * 6) + 10;
+
+// Array of 10-15 Integers Ranging From 0-99
+function getRandomNumbers(count) {
+  const numbers = [];
+
+  for (let i = 0; i < count; i++) {
+    const randomNumber = Math.floor(Math.random() * 100);
+    numbers.push(randomNumber);
+  }
+
+  return numbers;
+}
+
+console.log("Generating Array...");
+const treeArray = getRandomNumbers(randomCount);
+console.log(treeArray);
+
+console.log("Generating Binary Search Tree...");
+const testTree = new Tree(treeArray);
 console.log(prettyPrint(testTree.root));
 
-console.log(testTree.depth(1738));
+console.log("Testing Balance...");
 console.log(testTree.isBalanced());
+
+console.log("Printing Level Order...");
+const levelArray = [];
+
+testTree.levelOrderForEach((node) => {
+  levelArray.push(node.data);
+});
+console.log(levelArray);
+
+console.log("Printing Pre Order...");
+const preArray = [];
+
+testTree.preOrderForEach((node) => {
+  preArray.push(node.data);
+});
+console.log(preArray);
+
+console.log("Printing Post Order...");
+const postArray = [];
+
+testTree.postOrderForEach((node) => {
+  postArray.push(node.data);
+});
+console.log(postArray);
+
+console.log("Printing In Order...");
+const inArray = [];
+
+testTree.inOrderForEach((node) => {
+  inArray.push(node.data);
+});
+console.log(inArray);
+
+// Add 5 Numbers >100
+console.log("Adding 101, 102, 103, 104, 105...");
+testTree.insert(101);
+testTree.insert(102);
+testTree.insert(103);
+testTree.insert(104);
+testTree.insert(105);
+console.log(prettyPrint(testTree.root));
+
+console.log("Testing Balance...");
+console.log(testTree.isBalanced());
+
+console.log("Rebalancing Tree...");
+testTree.rebalance();
+console.log(prettyPrint(testTree.root));
+
+console.log("Testing Balance...");
+console.log(testTree.isBalanced());
+
+console.log("Printing Level Order...");
+const rebalancedLevelArray = [];
+
+testTree.levelOrderForEach((node) => {
+  rebalancedLevelArray.push(node.data);
+});
+console.log(rebalancedLevelArray);
+
+console.log("Printing Pre Order...");
+const rebalancedPreArray = [];
+
+testTree.preOrderForEach((node) => {
+  rebalancedPreArray.push(node.data);
+});
+console.log(rebalancedPreArray);
+
+console.log("Printing Post Order...");
+const rebalancedPostArray = [];
+
+testTree.postOrderForEach((node) => {
+  rebalancedPostArray.push(node.data);
+});
+console.log(rebalancedPostArray);
+
+console.log("Printing In Order...");
+const rebalancedInArray = [];
+
+testTree.inOrderForEach((node) => {
+  rebalancedInArray.push(node.data);
+});
+console.log(rebalancedInArray);
+
+//
+
+// Random Tests
+
+// const testTree = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
+// console.log(prettyPrint(testTree.root));
+// testTree.insert(69);
+// testTree.insert(420);
+// testTree.insert(1738);
+// console.log(prettyPrint(testTree.root));
+
+// console.log(testTree.depth(1738));
+// console.log(testTree.isBalanced());
+
+// testTree.rebalance();
+
+// console.log(prettyPrint(testTree.root));
