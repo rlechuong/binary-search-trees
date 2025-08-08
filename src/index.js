@@ -213,6 +213,31 @@ class Tree {
 
     return findHeight(targetNode);
   }
+
+  depth(value) {
+    const targetNode = this.find(value);
+    if (targetNode === null) {
+      return null;
+    }
+
+    function findDepth(root, target, currentDepth) {
+      if (root === null) {
+        return null;
+      }
+
+      if (root.data === target.data) {
+        return currentDepth;
+      }
+
+      if (target.data < root.data) {
+        return findDepth(root.left, target, currentDepth + 1);
+      } else if (target.data > root.data) {
+        return findDepth(root.right, target, currentDepth + 1);
+      }
+    }
+
+    return findDepth(this.root, targetNode, 0);
+  }
 }
 
 function buildTree(array) {
@@ -256,3 +281,5 @@ testTree.insert(69);
 testTree.insert(420);
 testTree.insert(1738);
 console.log(prettyPrint(testTree.root));
+
+console.log(testTree.depth(1738));
