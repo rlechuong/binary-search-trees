@@ -193,6 +193,26 @@ class Tree {
 
     postOrderForEachRecursive(this.root, callback);
   }
+
+  height(value) {
+    const targetNode = this.find(value);
+    if (targetNode === null) {
+      return null;
+    }
+
+    function findHeight(root) {
+      if (root === null) {
+        return -1;
+      }
+
+      let leftHeight = findHeight(root.left);
+      let rightHeight = findHeight(root.right);
+
+      return Math.max(leftHeight, rightHeight) + 1;
+    }
+
+    return findHeight(targetNode);
+  }
 }
 
 function buildTree(array) {
