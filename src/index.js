@@ -238,6 +238,30 @@ class Tree {
 
     return findDepth(this.root, targetNode, 0);
   }
+
+  isBalanced() {
+    function isBalancedRecursive(root) {
+      if (root === null) {
+        return { height: -1, balanced: true };
+      }
+
+      let leftInfo = isBalancedRecursive(root.left);
+      let rightInfo = isBalancedRecursive(root.right);
+
+      let currentHeight = Math.max(leftInfo.height, rightInfo.height) + 1;
+      let currentBalanced = true;
+      if (
+        Math.abs(leftInfo.height - rightInfo.height) > 1 ||
+        !leftInfo.balanced ||
+        !rightInfo.balanced
+      ) {
+        currentBalanced = false;
+      }
+
+      return { height: currentHeight, balanced: currentBalanced };
+    }
+    return isBalancedRecursive(this.root).balanced;
+  }
 }
 
 function buildTree(array) {
@@ -283,3 +307,4 @@ testTree.insert(1738);
 console.log(prettyPrint(testTree.root));
 
 console.log(testTree.depth(1738));
+console.log(testTree.isBalanced());
