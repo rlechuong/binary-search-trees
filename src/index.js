@@ -116,6 +116,10 @@ class Tree {
   }
 
   levelOrderForEach(callback) {
+    if (!callback) {
+      throw new Error("A callback is required.");
+    }
+
     if (this.root === null) {
       return;
     }
@@ -134,6 +138,60 @@ class Tree {
       }
       queue.shift();
     }
+  }
+
+  inOrderForEach(callback) {
+    if (!callback) {
+      throw new Error("A callback is required.");
+    }
+
+    function inOrderForEachRecursive(root, callback) {
+      if (root === null) {
+        return;
+      }
+
+      inOrderForEachRecursive(root.left, callback);
+      callback(root);
+      inOrderForEachRecursive(root.right, callback);
+    }
+
+    inOrderForEachRecursive(this.root, callback);
+  }
+
+  preOrderForEach(callback) {
+    if (!callback) {
+      throw new Error("A callback is required.");
+    }
+
+    function preOrderForEachRecursive(root, callback) {
+      if (root === null) {
+        return;
+      }
+
+      callback(root);
+      preOrderForEachRecursive(root.left, callback);
+      preOrderForEachRecursive(root.right, callback);
+    }
+
+    preOrderForEachRecursive(this.root, callback);
+  }
+
+  postOrderForEach(callback) {
+    if (!callback) {
+      throw new Error("A callback is required.");
+    }
+
+    function postOrderForEachRecursive(root, callback) {
+      if (root === null) {
+        return;
+      }
+
+      postOrderForEachRecursive(root.left, callback);
+      postOrderForEachRecursive(root.right, callback);
+      callback(root);
+    }
+
+    postOrderForEachRecursive(this.root, callback);
   }
 }
 
