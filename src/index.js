@@ -34,13 +34,14 @@ class Tree {
         root.right = insertRecursive(root.right, value);
       }
 
+      // If neither null nor duplicate, return node to maintain structure
       return root;
     }
 
     this.root = insertRecursive(this.root, value);
   }
 
-  delete(value) {
+  deleteItem(value) {
     function deleteRecursive(root, value) {
       // Base Case: Value not found or empty tree
       if (root === null) {
@@ -120,6 +121,7 @@ class Tree {
       throw new Error("A callback is required.");
     }
 
+    // Go Back Up If Hitting Null
     if (this.root === null) {
       return;
     }
@@ -127,6 +129,7 @@ class Tree {
     let queue = [];
     queue.push(this.root);
 
+    // Callback -> Add Left -> Add Right -> Remove Current Node
     while (queue.length > 0) {
       let current = queue[0];
       callback(current);
@@ -145,11 +148,13 @@ class Tree {
       throw new Error("A callback is required.");
     }
 
+    // Go Back Up If Hitting Null
     function inOrderForEachRecursive(root, callback) {
       if (root === null) {
         return;
       }
 
+      // Go Left -> Callback -> Go Right
       inOrderForEachRecursive(root.left, callback);
       callback(root);
       inOrderForEachRecursive(root.right, callback);
@@ -163,11 +168,13 @@ class Tree {
       throw new Error("A callback is required.");
     }
 
+    // Go Back Up If Hitting Null
     function preOrderForEachRecursive(root, callback) {
       if (root === null) {
         return;
       }
 
+      // Callback -> Go Left -> Go Right
       callback(root);
       preOrderForEachRecursive(root.left, callback);
       preOrderForEachRecursive(root.right, callback);
@@ -181,11 +188,13 @@ class Tree {
       throw new Error("A callback is required.");
     }
 
+    // Go Back Up If Hitting Null
     function postOrderForEachRecursive(root, callback) {
       if (root === null) {
         return;
       }
 
+      // Go Left -> Go Right -> Callback
       postOrderForEachRecursive(root.left, callback);
       postOrderForEachRecursive(root.right, callback);
       callback(root);
@@ -200,6 +209,7 @@ class Tree {
       return null;
     }
 
+    // Return -1 Since Only Counting Edges, Not Nodes
     function findHeight(root) {
       if (root === null) {
         return -1;
@@ -208,6 +218,8 @@ class Tree {
       let leftHeight = findHeight(root.left);
       let rightHeight = findHeight(root.right);
 
+      // Once The Deepest Leaf Node Is Found (Which Should = 0)
+      // This Should Increment By 1 (Edge) Up To Target Node
       return Math.max(leftHeight, rightHeight) + 1;
     }
 
@@ -221,14 +233,17 @@ class Tree {
     }
 
     function findDepth(root, target, currentDepth) {
+      // Base Case: Target Not Found In Tree
       if (root === null) {
         return null;
       }
 
+      // Target Found: Bubble Value Up The Tree
       if (root.data === target.data) {
         return currentDepth;
       }
 
+      // Increment currentDepth Every Time A Child Is Visited
       if (target.data < root.data) {
         return findDepth(root.left, target, currentDepth + 1);
       } else if (target.data > root.data) {
@@ -236,19 +251,24 @@ class Tree {
       }
     }
 
+    // Start currentDepth At 0, To Be Incremented Per Call
     return findDepth(this.root, targetNode, 0);
   }
 
   isBalanced() {
     function isBalancedRecursive(root) {
+      // Base Case: Return -1 Since Only Counting Edges
       if (root === null) {
         return { height: -1, balanced: true };
       }
 
+      // Get Information From Child Nodes
       let leftInfo = isBalancedRecursive(root.left);
       let rightInfo = isBalancedRecursive(root.right);
 
+      // For Each Node, Calculate Height
       let currentHeight = Math.max(leftInfo.height, rightInfo.height) + 1;
+      // Calculate Balanced, Checking All 3 Conditions
       let currentBalanced = true;
       if (
         Math.abs(leftInfo.height - rightInfo.height) > 1 ||
@@ -258,6 +278,7 @@ class Tree {
         currentBalanced = false;
       }
 
+      // Store Current Node's Information And Bubble It Back Up
       return { height: currentHeight, balanced: currentBalanced };
     }
     return isBalancedRecursive(this.root).balanced;
@@ -266,15 +287,18 @@ class Tree {
   rebalance() {
     const data = [];
 
+    // Traverse Tree And Store All Data In Array
     this.inOrderForEach(function (node) {
       data.push(node.data);
     });
 
+    // Rebuild Tree And Replace Root
     this.root = buildTree(data);
   }
 }
 
 function buildTree(array) {
+  // Sort Array And Remove Duplicates
   const sortedArray = array.sort((a, b) => a - b);
   const uniqueArray = [...new Set(sortedArray)];
 
@@ -283,12 +307,17 @@ function buildTree(array) {
       return null;
     }
 
+    // Find The Mid Point Of The Array
     const mid = Math.floor((start + end) / 2);
 
+    // Create A Node Using That Mid Point Value
     const root = new Node(array[mid]);
+    // Cut The Array In Half Up To The Mid Point And Repeat
     root.left = buildTreeRecursive(array, start, mid - 1);
+    // Cut The Array In Half Past The Mid Point And Repeat
     root.right = buildTreeRecursive(array, mid + 1, end);
 
+    // Return The Root With Right And Left Assigned To Bubble Up
     return root;
   }
 
@@ -419,21 +448,3 @@ testTree.inOrderForEach((node) => {
   rebalancedInArray.push(node.data);
 });
 console.log(rebalancedInArray);
-
-//
-
-// Random Tests
-
-// const testTree = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
-// console.log(prettyPrint(testTree.root));
-// testTree.insert(69);
-// testTree.insert(420);
-// testTree.insert(1738);
-// console.log(prettyPrint(testTree.root));
-
-// console.log(testTree.depth(1738));
-// console.log(testTree.isBalanced());
-
-// testTree.rebalance();
-
-// console.log(prettyPrint(testTree.root));
